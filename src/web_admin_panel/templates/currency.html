@@ -1,0 +1,49 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <h2 style="border-bottom:2px solid #E6E9ED; ">Общая информация</h2>
+                <p>
+                    <label for="tag">Тег:</label>
+                    <input class="form-control" name="tag" id="tag" type="text" value=
+                            "{% if target_text %}{{ target_text.tag }}{% endif %}">
+                </p>
+                {% for language in languages %}
+                    <p>
+                    <h2 style="border-bottom:2px solid #E6E9ED; " >{{ language.name }}</h2>
+                    <label for="value">Значние:</label>
+                    <textarea class="form-control" rows="5" name="{{ language.tag }}_value" id="value">{% if target_text and target_text.values.get(language.tag) %}{{ target_text.values.get(language.tag) }}{% endif %}</textarea>
+                    </p>
+
+                {% endfor %}
+                <button type="submit" class="btn btn-round btn-success">Сохранить</button>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}

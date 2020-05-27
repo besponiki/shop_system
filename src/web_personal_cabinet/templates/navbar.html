@@ -1,0 +1,44 @@
+
+    <div class="container body">
+        <div class="main_container" style="background-color: #ffffff">
+            <div class="col-md-3 left_col" style="background-color: #2A3F54; width: 240px; min-height: 1000px">
+                <div class="left_col scroll-view">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="/" class="site_title"><span>Partner panel</span></a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+
+
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <h3>General</h3>
+                            <ul class="nav side-menu">
+                            <li><a href="/"><i class="far fa-user"></i>  {{ navbar.get('my_profile') }} </a></li>
+                            <li><a href="/categories"><i class="fas fa-angle-double-right"></i>  {{ navbar.get('categories') }} </a></li>
+                            <li><a href="/fields"><i class="fas fa-angle-double-right"></i>  {{ navbar.get('fields') }} </a></li>
+                            <li><a href="/new_orders"><i class="fas fa-angle-double-right"></i> {{ navbar.get('menu_new_order') }}</a></li>
+                            <li><a href="/in_work_orders"><i class="fas fa-angle-double-right"></i> {{ navbar.get('menu_in_work_order') }}</a></li>
+                            <li><a href="/done_orders"><i class="fas fa-angle-double-right"></i> {{ navbar.get('menu_done_orders') }}</a></li>
+                            <li><a href="/cancel_orders"><i class="fas fa-angle-double-right"></i> {{ navbar.get('menu_cancel_orders') }}</a></li>
+                            <li><a href="/my_goods"><i class="fas fa-angle-double-right"></i> {{ navbar.get('my_goods_lk') }}</a></li>
+                            <li><a href="/feedback"><i class="fas fa-angle-double-right"></i> {{ navbar.get('feedback') }}</a></li>
+                            <li><a href="/graph"><i class="fas fa-angle-double-right"></i> {{ navbar.get('graph') }}</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- /sidebar menu -->
+
+                    <!-- /menu footer buttons -->
+                    <div class="sidebar-footer hidden-small">
+                        <a style="color:#ffffff;" data-toggle="tooltip" data-placement="top" title="Logout" href="/logout">
+                            <span aria-hidden="true"><i class="fas fa-sign-out-alt"></i>Exit</span>
+                        </a>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+

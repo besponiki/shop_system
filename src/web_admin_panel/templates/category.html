@@ -1,0 +1,63 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Категория{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Общая информация</div>
+                    <div class="panel-body">
+
+                        {% for language in languages %}
+                    <p>
+                    <label style="border-bottom:2px solid #E6E9ED; " >{{ language.name }}</label>
+                    <label for="value">Название:</label>
+                    <input class="form-control" name="{{ language.tag }}_name" id="name" type="text" value=
+                        "{% if target_category %}{% if target_category.values.get(language.tag) %}{{ target_category.values.get(language.tag) }}{% endif %}{% endif %}">
+
+                {% endfor %}
+                            {% if categories %}
+                            <p>
+                                <label for="message">Родительская категория:</label>
+                                <select name="parent">
+                                    <option value="0" selected="selected">Не изменять родительскую категорию</option>
+                                    <option value="1">Убрать родительскую категорию</option>
+
+                                    {% for category in categories %}
+                                        {% if not category.id == target_category_id %}<option value="{{ category.id }}" {% if category == target_category.parent_category %} selected="selected"{% endif %}>{{ category.values.get('rus') }}</option>{% endif %}
+                                    {% endfor %}
+
+                                </select>
+                                </p>
+                            {% endif %}
+
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-lg pull-right">Сохранить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}

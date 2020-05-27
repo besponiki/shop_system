@@ -1,0 +1,147 @@
+<nav class="navbar navbar-inverse">
+    <ul class="nav navbar-nav">
+    {# superadmin #}
+        {% if user.rank == 0 %}
+        <li><a href="/">Тексты</a><ul>
+
+            <li><a href="/texts">Тексты</a></li>
+            <li><a href="/languages">Языки</a></li>
+            </ul>
+        </li>
+
+        <li><a href="/">Настройки</a>
+            <ul>
+            <li><a href="/">Настройки Бота</a></li>
+            <li><a href="/marketing">Маркетинг</a></li>
+            <li><a href="/finances">Финансы</a></li>
+
+            </ul>
+        </li>
+
+        <li><a href="/">Пользователи</a>
+            <ul>
+                <li><a href="/users">Пользователи Telegram</a></li>
+                <li><a href="/shops">Магазины</a></li>
+                <li><a href="/web_admins">Администраторы</a></li>
+
+            </ul>
+        </li>
+{#        <li><a href="/marketing">Маркетинг</a></li>#}
+        <li><a href="/graph">Граф</a></li>
+{#        <li><a href="/attendance">Услуги</a></li>#}
+
+        <!--<li><a href="/graph">Граф</a></li>-->
+        <li><a href="/categories">Категории</a></li>
+        <li><a href="/">Обьявления</a>
+            <ul>
+                <li><a href="/adverts">Новые обьявления</a></li>
+
+                <li><a href="/publicated_adverts">Принятые обьявления</a></li>
+                <li><a href="/cancel_adverts">Отклоненные обьявления</a></li>
+            </ul>
+        </li>
+{#        <li><a href="/attendance">Товары</a></li>#}
+        <li><a href="/feedbacks">Обратная связь</a></li>
+        <li><a href="/frequents">FAQ</a></li>
+        <li><a href="/">Модерация</a>
+        <ul>
+            <li><a href="/fields">Модерация полей</a></li>
+            <li><a href="/comments">Комментарии</a></li>
+            <li><a href="/adverts">Новые обьявления</a></li>
+
+        </ul>
+        </li>
+        <li><a href="/currencies">Кошельки</a></li>
+        <li><a href="/reversations">Бронь</a></li>
+{#        <li><a href="/">Тест</a>#}
+{#            <ul>#}
+{#                <li><a href="/generate_test">Генерация пользователей</a>#}
+{#                <li><a href="/generate_logs">Логи генерации пользователей</a>#}
+{#                <li><a href="/distribute_test">Тест распределения</a>#}
+{#                <li><a href="/distribute_logs">Логи распределения</a>#}
+{#                <li><a href="/nullify_balance">Обнулить баланс всем пользователям</a></li>#}
+{#                <li><a href="/drop_structure">Удалить структуру</a></li>#}
+{##}
+{#            </ul>#}
+{#        </li>#}
+        {% endif %}
+{# technician #}
+    {% if user.rank == 1 %}
+        <li><a href="/languages">Языки</a></li>
+        <li><a href="/texts">Тексты</a></li>
+{#        <li><a href="/">Настройки</a></li>#}
+{#        <li><a href="/users">Пользователи</a></li>#}
+{#        <li><a href="/attendance">Услуги</a></li>#}
+        <!--<li><a href="/graph">Граф</a></li>-->
+{#        <li><a href="/web_admins">Администраторы</a></li>#}
+{#        <li><a href="/attendance">Товары</a></li>#}
+        {% endif %}
+{# administrator #}
+    {% if user.rank == 2 %}
+        <li><a href="/">Пользователи</a>
+            <ul>
+                <li><a href="/users">Пользователи Telegram</a></li>
+                <li><a href="/shops">Магазины</a></li>
+
+            </ul>
+        </li>
+        <li><a href="/">Модерация</a>
+        <ul>
+            <li><a href="/fields">Модерация полей</a></li>
+            <li><a href="/comments">Комментарии</a></li>
+            <li><a href="/adverts">Новые обьявления</a></li>
+
+        </ul>
+        </li>
+        <li><a href="/">Обьявления</a>
+            <ul>
+                <li><a href="/adverts">Новые обьявления</a></li>
+
+                <li><a href="/publicated_adverts">Принятые обьявления</a></li>
+                <li><a href="/cancel_adverts">Отклоненные обьявления</a></li>
+            </ul>
+        </li>
+{#        <li><a href="/attendance">Услуги</a></li>#}
+
+        <!--<li><a href="/graph">Граф</a></li>-->
+        <li><a href="/categories">Категории</a></li>
+{#        <li><a href="/web_admins">Администраторы</a></li>#}
+
+{#        <li><a href="/attendance">Товары</a></li>#}
+        <li><a href="/feedbacks">Обратная связь</a></li>
+        <li><a href="/frequents">FAQ</a></li>
+        {% endif %}
+{# work support #}
+    {% if user.rank == 3 %}
+{#        <li><a href="/web_admins">Администраторы</a></li>#}
+        <li><a href="/feedbacks">Обратная связь</a></li>
+        <li><a href="/frequents">FAQ</a></li>
+        <li><a href="/comments">Комментарии</a></li>
+        {% endif %}
+{# work sale #}
+    {% if user.rank == 4 %}
+{#        <li><a href="/languages">Языки</a></li>#}
+{#        <li><a href="/texts">Тексты</a></li>#}
+{#        <li><a href="/">Настройки</a></li>#}
+{#        <li><a href="/users">Пользователи</a></li>#}
+{#        <li><a href="/attendance">Услуги</a></li>#}
+
+        <!--<li><a href="/graph">Граф</a></li>-->
+{#        <li><a href="/categories">Категории</a></li>#}
+{#        <li><a href="/shops">Магазины</a></li>#}
+{#        <li><a href="/web_admins">Администраторы</a></li>#}
+        <li><a href="/adverts">Обьявления</a></li>
+        <li><a href="/publicated_adverts">Принятые обьявления</a></li>
+        <li><a href="/cancel_adverts">Отклоненные обьявления</a></li>
+        <li><a href="/fields">Модерация полей</a></li>
+{#        <li><a href="/attendance">Товары</a></li>#}
+{#        <li><a href="/feedbacks">Обратная связь</a></li>#}
+{#        <li><a href="/frequents">FAQ</a></li>#}
+{#        <li><a href="/comments">Комментарии</a></li>#}
+        {% endif %}
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
+    </ul>
+</nav>

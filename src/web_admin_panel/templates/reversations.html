@@ -1,0 +1,102 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="add_btn">
+        <button type="button" id="create" class="btn btn-round btn-success" style="margin-top: 30px; margin-bottom: 20px; margin-left: 10px">Добавить аккаунты на бронь</button>
+
+    </div>
+{#    <form method="POST" enctype="multipart/form-data" class="form-horizontal">#}
+{#        <div class="form-group">#}
+{#            <div class="col-sm-offset-10 col-sm-10">#}
+{#                <label for="page">Страница:</label>#}
+{#                <input class="form-control" name="page" id="page" type="text" value=#}
+{#                        "{{ p }}">#}
+{#                <label for="search">Поиск:</label>#}
+{#                <input class="form-control" name="search" id="search" type="text" value=#}
+{#                        "{{ search }}">#}
+{##}
+{#                <button type="submit" name="submit" class="btn btn-default">Поиск(Перейти на страницу)</button>#}
+{#            </div>#}
+{#        </div>#}
+{#            </form>#}
+
+        <input type="hidden" name="act" value="showSignals">
+        <input type="hidden" name="p" value={{ p }}>
+
+        <div class="table-responsive">
+            <table class="table table-hover" align="center">
+                <thead>
+                    <tr>
+                        <th>Номер в структуре</th>
+                        <th>Процент</th>
+                        <th>Уровень в структуре</th>
+                        <th>Выдать</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{% if row.positional_id %}{{ row.positional_id }}{% endif %}</td>
+                            <td>{% if row.percent %}{{ row.percent }}{% endif %}</td>
+                            <td>{% if row.level %}{{ row.level }}{% endif %}</td>
+                            <td><a href="give_out_reversation/{{ row.id }}">Выдать</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    <nav aria-label="...">
+        <ul class="pager">
+            Страница {{ p }}/{{ p_all }} <br>
+            <li class="{% if p <= 1 %}disabled{% endif %}">
+                <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">Назад</a>
+            </li>
+            <li class="{% if p >= p_all %}disabled{% endif %}">
+                <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">Вперед</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        function switchCheckbox(node) {
+            status = node.checked;
+            els = document.getElementsByTagName("input");
+            for( i in els ) {
+                if(els[i].name != "del[]") continue;
+                els[i].checked = status ? true : false;
+                console.log(els[i].checked);
+            }
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('create')
+        task_button.onclick = function() {
+            window.location.href = "/reversation";
+            return false;
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('page_btn')
+        task_button.onclick = function() {
+            window.location.href = "/shops";
+            return false;
+        }
+    </script>
+
+    {{super()}}
+{% endblock %}

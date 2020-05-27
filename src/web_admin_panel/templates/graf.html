@@ -1,0 +1,55 @@
+{#{% extends "bootstrap/base.html" %}#}
+{##}
+{##}
+{#{% block head %}#}
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='Graph_tree/CSS/jquery-ui.min.css') }}">#}
+{#        <script src="https://code.jquery.com/jquery-1.12.4.min.js"#}
+{#        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"#}
+{#        crossorigin="anonymous">#}
+{#        </script>#}
+{#        <script src="../static/Graph_tree/js/jquery-ui-1.10.4.custom.min.js"></script>#}
+{#        <link rel="stylesheet" href="{{ url_for('.static', filename='Graph_tree/CSS/jHTree.css') }}">#}
+{#        <script src="../static/Graph_tree/js/jQuery.jHTree.js"></script>#}
+{##}
+{#    {% block title %}Граф{% endblock %}#}
+{#    {% endblock %}#}
+{##}
+{#{% block navbar %}#}
+{#    {% include 'navbar.html' %}#}
+{#{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#    {% if error %}#}
+{#        <div class="alert alert-danger alert-dismissible" role="alert">#}
+{#            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+{#            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>#}
+{#            <span class="sr-only">Error:</span>#}
+{#            {{ error }}#}
+{#        </div>#}
+{#    {% endif %}#}
+{# <label for="password" style="margin-top: 5px">{{ index.get('old_password') }}</label>#}
+{#    <input class="form-control" type="password" name="old_password" id="password" value="">#}
+{#<div id="tree" style="width: 200000000px">#}
+{##}
+{#</div>#}
+{##}
+{##}
+{##}
+{#{% endblock %}#}
+{##}
+{#{% block styles %}#}
+{#    {{super()}}#}
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">#}
+{#{% endblock %}#}
+{##}
+{#{% block scripts %}#}
+{#    <script>#}
+{#        var myData = {{ data | tojson }};#}
+{##}
+{#        $("#tree").jHTree({#}
+{#            callType: 'obj',#}
+{#            structureObj: myData#}
+{##}
+{#        });#}
+{#    </script>#}
+{#{% endblock %}#}

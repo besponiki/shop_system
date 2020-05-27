@@ -1,0 +1,10 @@
+werkzeug
+requests
+schedule
+mongoengine
+phonenumbers
+flask
+flask-bootstrap
+flask-mongoengine
+PyTelegramBotApi
+pytz

@@ -1,0 +1,120 @@
+{% extends "bootstrap/base.html" %}
+
+{% block head %}
+{#    <style>#}
+{#    .tree > ul > li {#}
+{#    display: inline-block;#}
+{#    float: none;#}
+{#    {% if children_count<4   %}#}
+{#    width: auto ;}#}
+{#    .tree{#}
+{#    margin-left: 200px;#}
+{#    }#}
+{#    {% endif %}#}
+{#    {% if 4<=children_count<8   %}#}
+{#    width: auto;}#}
+{#    .tree{#}
+{#    margin-left: 200px;#}
+{#    }#}
+{#    {% endif %}#}
+{#    {% if 8<=children_count<16   %}#}
+{#    width: auto;}#}
+{#    .tree{#}
+{#    margin-left: 200px;#}
+{#    }#}
+{#    {% endif %}#}
+{#    {% if 16<=children_count<32   %}#}
+{#    width:3000px;}#}
+{#        {% else %}#}
+{#    width: 6000px#}
+{#    {% endif %}#}
+{#</style>#}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='Graph_tree/CSS/jquery-ui.min.css') }}">
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous">
+        </script>
+        <script src="{{ url_for('.static', filename='Graph_tree/js/jquery-ui-1.10.4.custom.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('.static', filename='css/jHTree.css') }}">
+        <script src="{{ url_for('.static', filename='Graph_tree/js/jQuery.jHTree.js') }}"></script>
+
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+    {% endblock %}
+
+
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Описание</div>
+                    <div class="panel-body">
+                    {% for field in target_advert.fields %}
+                        <label>{{field}}: </label>
+                        <label>{{ target_advert.fields.get(field) }}</label><br>
+                    {% endfor %}
+{#                        <label for="price">Цена:</label>#}
+{#                        <label>{{target_advert.fields.price}}</label><br>#}
+{#                        <label for="destributed_price">Сумма распределения:</label>#}
+{#                        <label>{{ target_advert.fields.distributed_price }}</label><br>#}
+{#                        <label for="name">Название объявления:</label>#}
+{#                        <label>{{ target_advert.fields.name }}</label><br>#}
+{#                        <label for="description">Описание:</label>#}
+{#                        <label>{{ target_advert.fields.description }}</label><br>#}
+                        <label>Категория:</label>
+                        <label>{{ target_advert.category.values.get('rus') }}</label><br>
+                        <label>Автор:</label>
+                        <label>{% if target_advert %}{{ target_advert.creator.login }}{% endif %}</label><br>
+                    {%  for img in target_advert.images %}
+                        <img height="200px"  src="{{ url_for('.static', filename=img) }}"><br>
+                    {% endfor %}
+                    </div>
+                </div>
+
+
+                <!--<button type="submit" class="btn btn-danger btn-lg pull-right">Сохранить</button>-->
+            </form>
+        </div>
+    </div>
+
+<div id="tree">
+
+</div>
+{% endblock %}
+
+
+
+
+{% block scripts %}
+    <script>
+        var myData = {{ data | tojson }};
+
+
+        $("#tree").jHTree({
+            callType: 'obj',
+            structureObj: myData
+
+        });
+    </script>
+{% endblock %}

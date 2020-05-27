@@ -1,0 +1,63 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Язык</div>
+                    <div class="panel-body">
+                        <label for="name">Название:</label>
+                        <input class="form-control" name="name" id="name" type="text" value=
+                        "{% if target_language %}{{ target_language.name }}{% endif %}">
+
+                        <label for="tag">Тег:</label>
+                        <input class="form-control" name="tag" id="tag" type="text" value=
+                        "{% if target_language %}{{ target_language.tag }}{% endif %}">
+
+                        <label for="button_text">Текс кнопки</label>
+                        <input class="form-control" name="button_text" id="button_text" type="text" value=
+                        "{% if target_language %}{{ target_language.button_text }}{% endif %}">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-lg pull-right">Сохранить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        task_button = document.getElementById('new-task')
+        task_button.onclick = function() {
+            window.location.href = "/task";
+            return false;
+        }
+    </script>
+
+    {{super()}}
+{% endblock %}

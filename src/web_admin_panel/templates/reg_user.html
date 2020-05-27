@@ -1,0 +1,102 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Общая информация</div>
+                    <div class="panel-body">
+                        <label>Id: {{ user.user_id }}</label><br>
+                        <label>Username: {{ user.username }}</label><br>
+                        <label>Доход од рефералов: {{ user.withdrawal_balance }} р.</label><br>
+                        <label>Текущий баланс: {{ user.balance }} р.</label><br>
+                        <label>Выведено всего: {{ user.withdrawal_balance }} р.</label><br>
+                        <label>Заработано всего: {{ user.balance }} р.</label><br>
+                        <label>Статус: {{ user.status }}</label><br>
+                        <label>Оплачен до: {{ user.last_subscription_date }}</label><br>
+                        <label>Рефералы 1 уровня:
+                        {% if user.referral_users_1_level %}
+                            {% for user in user.referral_users_1_level %}
+                                {% if user.username  %}@{{ user.username }}{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                        </label><br>
+                        <label>Рефералы 2 уровня:
+                        {% if user.referral_users_2_level %}
+                            {% for user in user.referral_users_2_level %}
+                                {% if user.username  %}@{{ user.username }}{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                        </label><br>
+                        <label>Рефералы 3 уровня:
+                        {% if user.referral_users_3_level %}
+                            {% for user in user.referral_users_3_level %}
+                                {% if user.username  %}@{{ user.username }}{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                        </label><br>
+                        <label>Рефералы 4 уровня:
+                        {% if user.referral_users_4_level %}
+                            {% for user in user.referral_users_4_level %}
+                                {% if user.username  %}@{{ user.username }}{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                        </label><br>
+                        <label>Рефералы 5 уровня:
+                        {% if user.referral_users_5_level %}
+                            {% for user in user.referral_users_5_level %}
+                                {% if user.username  %}@{{ user.username }}{% endif %}
+                            {% endfor %}
+                        {% else %}
+                            -
+                        {% endif %}
+                        </label>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Изменить</div>
+                    <div class="panel-body">
+                        <label for="balance">Баланс:</label>
+                        <input class="form-control" name="balance" id="balance" type="text" value=
+                        "{{ user.balance }}">
+
+
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-lg pull-right">Сохранить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}

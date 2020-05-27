@@ -1,0 +1,64 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Категории{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="add_btn">
+        <button type="button" id="create" class="btn btn-round btn-success" style="margin-top: 30px; margin-bottom: 20px; margin-left: 10px">Очистить логи</button>
+
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <input type="hidden" name="act" value="showSignals">
+        <input type="hidden" name="p" value={{ p }}>
+
+        <div class="table-responsive">
+            {% for log in logs %}
+                <textarea style=" margin-left: 50px; min-width: 650px; height: 800px">{{ log.date }}: {{ log.result }}</textarea><br>
+
+            {% endfor %}
+        </div>
+    </form>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/categories.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        function switchCheckbox(node) {
+            status = node.checked;
+            els = document.getElementsByTagName("input");
+            for( i in els ) {
+                if(els[i].name != "del[]") continue;
+                els[i].checked = status ? true : false;
+                console.log(els[i].checked);
+            }
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('new-task')
+        task_button.onclick = function() {
+            window.location.href = "/task";
+            return false;
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('create')
+        task_button.onclick = function() {
+            window.location.href = '/delete_distribute_logs';
+            return false;
+        }
+    </script>
+
+    {{super()}}
+{% endblock %}

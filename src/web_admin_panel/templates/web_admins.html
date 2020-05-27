@@ -1,0 +1,112 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Администраторы{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <button type="button" id="create" class="btn btn-danger">Добавить</button>
+<br><br>
+&nbsp;&nbsp;<p>&nbsp;&nbsp;&nbsp;Всего пользователей: {{ u_all }}</p>
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+{#        <div class="form-group">#}
+{#            <div class="col-sm-offset-10 col-sm-10">#}
+{#                <button type="submit" name="submit" class="btn btn-default">Удалить выбранные</button>#}
+{#            </div>#}
+{#        </div>#}
+        <div class="form-group">
+            <div class="col-sm-offset-10 col-sm-10">
+                <label for="page">Страница:</label>
+                <input class="form-control" name="page" id="page" type="text" value=
+                        "{{ p }}">
+                <label for="search">Поиск:</label>
+                <input class="form-control" name="search" id="search" type="text" value=
+                        "{{ search }}">
+
+                <button type="submit" name="submit" class="btn btn-default">Поиск(Перейти на страницу)</button>
+            </div>
+        </div>
+        <input type="hidden" name="act" value="showSignals">
+        <input type="hidden" name="p" value={{ p }}>
+
+        <div class="table-responsive">
+            <table class="table table-hover" align="center">
+                <thead>
+                    <tr>
+{#                        <th><input type="checkbox" onchange="switchCheckbox(this);" id="check_all"></th>#}
+                        <th>Login</th>
+                        <th>Password</th>
+                        <th>Просмотр/Редактирование</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.login }}</td>
+                            <td>{{ row.password_text }}</td>
+                            <td><a href="web_admins/edit/{{ row.id }}">Просмотр/Редактирование</a></td>
+                            <td><a href="/web_admins/del/{{ row.id }}">Удалить</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+{#        <div class="form-group">#}
+{#            <div class="col-sm-offset-10 col-sm-10">#}
+{#                <button type="submit" name="submit" class="btn btn-default">Удалить выбранные</button>#}
+{#            </div>#}
+{#        </div>#}
+    </form>
+
+    <nav aria-label="...">
+        <ul class="pager">
+            Страница {{ p }}/{{ p_all }} <br>
+            <li class="{% if p <= 1 %}disabled{% endif %}">
+                <a href="{% if p > 1 %}/users?p={{ p - 1 }}{% endif %}">Назад</a>
+            </li>
+            <li class="{% if p >= p_all %}disabled{% endif %}">
+                <a href="{% if p < p_all %}/users?p={{ p + 1 }}{% endif %}">Вперед</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        function switchCheckbox(node) {
+            status = node.checked;
+            els = document.getElementsByTagName("input");
+            for( i in els ) {
+                if(els[i].name != "del[]") continue;
+                els[i].checked = status ? true : false;
+                console.log(els[i].checked);
+            }
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('new-task')
+        task_button.onclick = function() {
+            window.location.href = "/task";
+            return false;
+        }
+    </script>
+    <script>
+        task_button = document.getElementById('create')
+        task_button.onclick = function() {
+            window.location.href = "/web_admin";
+            return false;
+        }
+    </script>
+
+    {{super()}}
+{% endblock %}

@@ -1,0 +1,230 @@
+
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#applying_modal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let deleting_obj_id = button.data('id');
+
+                let modal = $(this);
+
+                modal.find('#apply_button').attr('data-link', 'ajax/category/del/' + deleting_obj_id);
+            });
+
+            let data_table = $('#user_table').DataTable({
+                responsive: {
+                    details: false
+                },
+
+                ajax: {
+                    url: {% if not parent_category %}'/ajax/categories'{% else %}'/ajax/subcategories/{{ parent_category.id }}'{% endif %},
+                    dataSrc: '',
+                    deferRender: true
+                },
+
+                columns: [
+
+                    { data: 'text' },
+                    { data: 'parent_category' },
+                    { data: 'add_sub_button_html' },
+                    { data: 'subcategories' },
+                    { data: 'moderation' },
+                    { data: 'edit_button_html' },
+                    { data: 'delete_button_html' },
+                ]
+            });
+
+            $('#apply_button').on('click', function (event) {
+                event.preventDefault();
+                let button = $(this);
+
+                $.ajax({
+                    type: 'POST',
+                    url: button.data('link'),
+                    success: function (result) {
+                        data_table.ajax.reload( null, false );
+
+                        jQuery('#applying_modal').modal('hide');
+                    },
+                    error: function (result) {
+                        alert('error');
+                    }
+                });
+            });
+
+            setInterval( function () {
+                data_table.ajax.reload( null, false );
+            }, 30000 );
+        });
+    </script>
+
+    <script>
+        task_button = document.getElementById('create')
+        task_button.onclick = function() {
+            window.location.href = {% if parent_category %}'/sub_category/{{ parent_category.id }}'{% else %}'/category'{% endif %};
+            return false;
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <button type="button" id="create" class="btn btn-danger">Добавить категорию</button>
+    <br>
+    <br>
+    <br>
+
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <div class="table-responsive">
+            <table class="table table-hover tablesorter" id="user_table" align="center">
+                <thead>
+                    <tr>
+                        <th>Текст</th>
+                        <th>Родительская категория</th>
+                        <th>Добавить подкатегорию</th>
+                        <th>Подкатегории</th>
+                        <th>Прошло модерацию</th>
+                        <th>Редактировать</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </form>
+
+    <div class="modal fade" id="applying_modal" tabindex="-1" role="dialog" aria-labelledby="applying_modal_lable" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Подтвердите удаление:</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" data-link="<delete_link>" id="apply_button">Подтвердить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+{#{% extends "bootstrap/base.html" %}#}
+{##}
+{#{% block title %}Категории{% endblock %}#}
+{##}
+{#{% block navbar %}#}
+{#    {% include 'navbar.html' %}#}
+{#{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#    <div class="add_btn">#}
+{#        <button type="button" id="create" class="btn btn-round btn-success" style="margin-top: 30px; margin-bottom: 20px; margin-left: 10px">Добавить новую категорию</button>#}
+{##}
+{#    </div>#}
+{##}
+{#    <form method="POST" enctype="multipart/form-data" class="form-horizontal">#}
+{#        <input type="hidden" name="act" value="showSignals">#}
+{#        <input type="hidden" name="p" value={{ p }}>#}
+{##}
+{#        <div class="table-responsive">#}
+{#            <table class="table table-striped jambo_table bulk_action" align="center">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th>Текст</th>#}
+{#                        <th>Родительская категория</th>#}
+{#                        <th>Добавить подкатегорию</th>#}
+{#                        <th>Подкатегории</th>#}
+{#                        <th>Количество столбцов</th>#}
+{#                        <th>Количество рядков</th>#}
+{#                        <th>Прошло модерацию</th>#}
+{#                        <th>Редактировать</th>#}
+{#                        <th>Удалить</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                    {% for row in rows %}#}
+{#                        <tr>#}
+{#                            <td>{{ row.values['rus'] }}</td>#}
+{#                            <td>{% if row.parent_category %}{{ row.parent_category.values['rus'] }}{% endif %}</td>#}
+{#                            <td><a href="sub_category/{{ row.id }}">Добавить подкатегорию</a></td>#}
+{#                            <td><a href={% if row.parent_category %}{% else %}sub_categories/{% endif %}{{ row.id }}>Подкатегории</a></td>#}
+{#                            <td>{{ row.category_col_num }}</td>#}
+{#                            <td>{{ row.category_row_num }}</td>#}
+{#                            <td>{% if row.is_moderated %}<a href="{{ url_for('moderate_off', category_id=row.id) }}">Удалить из бота</a>{% else %}<a href="{{ url_for('moderate_on', category_id=row.id) }}">Добавить в бота</a>{% endif %}</td>#}
+{#                            <td><a href="category/edit/{{ row.id }}">Редактировать</a></td>#}
+{#                            <td><a href={% if row.parent_category %}del/{% else %}category/del/{% endif %}{{ row.id }}>Удалить</a></td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+{#        </div>#}
+{#    </form>#}
+{#    <nav aria-label="...">#}
+{#        <ul class="pager">#}
+{#            Страница {{ p }}/{{ p_all }} <br>#}
+{#            <li class="{% if p <= 1 %}disabled{% endif %}">#}
+{#                <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">Назад</a>#}
+{#            </li>#}
+{#            <li class="{% if p >= p_all %}disabled{% endif %}">#}
+{#                <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">Вперёд</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </nav>#}
+{#{% endblock %}#}
+{##}
+{#{% block styles %}#}
+{#    {{super()}}#}
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='css/categories.css') }}">#}
+{#{% endblock %}#}
+{##}
+{#{% block scripts %}#}
+{#    <script type="text/javascript">#}
+{#        function switchCheckbox(node) {#}
+{#            status = node.checked;#}
+{#            els = document.getElementsByTagName("input");#}
+{#            for( i in els ) {#}
+{#                if(els[i].name != "del[]") continue;#}
+{#                els[i].checked = status ? true : false;#}
+{#                console.log(els[i].checked);#}
+{#            }#}
+{#        }#}
+{#    </script>#}
+{##}
+{#    <script>#}
+{#        task_button = document.getElementById('new-task')#}
+{#        task_button.onclick = function() {#}
+{#            window.location.href = "/task";#}
+{#            return false;#}
+{#        }#}
+{#    </script>#}
+{##}
+{#    <script>#}
+{#        task_button = document.getElementById('create')#}
+{#        task_button.onclick = function() {#}
+{#            window.location.href = {% if category %}'/sub_category/{{ category.id }}'{% else %}'/category'{% endif %};#}
+{#            return false;#}
+{#        }#}
+{#    </script>#}
+{##}
+{#    {{super()}}#}
+{#{% endblock %}#}

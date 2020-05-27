@@ -1,0 +1,82 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='Graph_tree/CSS/jquery-ui.min.css') }}">
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous">
+        </script>
+        <script src="{{ url_for('.static', filename='Graph_tree/js/jquery-ui-1.10.4.custom.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('.static', filename='Graph_tree/CSS/jHTree.css') }}">
+        <script src="{{ url_for('.static', filename='Graph_tree/js/jQuery.jHTree.js') }}"></script>
+
+        <script>
+        task_button = document.getElementById('back')
+        task_button.onclick = function() {
+            window.location.href = "/distribute_test";
+            return false;
+        }
+    </script>
+
+        {% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+    {% endblock %}
+
+
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Результат</div>
+                    <div class="panel-body">
+                        <textarea style="min-width: 650px; height: 800px">{{ result }}</textarea><br>
+
+
+                    </div>
+                </div>
+
+            </form>
+            <label><a href="{{  url_for("distribute_test") }}">Назад</a></label><br>
+
+
+{#            <button type="button", href="/test" class="btn btn-danger btn-lg pull-right">Назад</button>#}
+
+        </div>
+    </div>
+{#    <div  id="tree">#}
+
+        </div>
+{% endblock %}
+
+
+{#{% block scripts %}#}
+{#    <script>#}
+{#        var myData = {{ data | tojson }};#}
+{##}
+{#        $("#tree").jHTree({#}
+{#            callType: 'obj',#}
+{#            structureObj: myData#}
+{##}
+{#        });#}
+{#    </script>#}
+{#{% endblock %}#}

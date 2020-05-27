@@ -1,0 +1,122 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}{{ texts.get('fields') }}{% endblock %}
+
+{% block head %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap.min.css') }}">
+    <!-- NProgress -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/nprogress.css') }}">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/animate.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/green.css') }}">
+    <!-- bootstrap-progressbar -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap-progressbar-3.3.4.min.css') }}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/jqvmap.min.css') }}">
+    <!-- bootstrap-daterangepicker -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/daterangepicker.css') }}">
+    <!-- Custom Theme Style -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom.min.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+<div class="right_body">
+{% block content %}
+    <button type="button" id="create" class="btn btn-round btn-success" style="margin-top: 30px; margin-bottom: 20px; margin-left: 10px">{{ texts.get('add_new_field') }}</button>
+
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <input type="hidden" name="act" value="showSignals">
+        <input type="hidden" name="p" value={{ p }}>
+
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action" align="center">
+                <thead>
+                    <tr>
+                        <th>{{ texts.get('tag') }}</th>
+                        <th>{{ texts.get('value_lang') }}</th>
+                        <th>{{ texts.get('moderation') }}</th>
+{#                        <th>{{ texts.get('edit') }}</th>#}
+                        <th>{{ texts.get('delete') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.field_tag }}</td>
+                            <td>{{ row.names.get('rus') }}</td>
+                            <td>{% if row.is_moderated %}{{ texts.get('passed_moderation_msg') }}{% else %}{{ texts.get('no_moderation') }}{% endif %}</td>
+{#                            <td><a href="field/edit/{{ row.id }}">{{ texts.get('edit') }}</a></td>#}
+
+{#                            <td><a href="field/del/{{ row.id }}">{{ texts.get('delete') }}</a></td>#}
+                            {% if row.is_required %}<td></td>{% elif not row.in_active %}<td><a href="field/add/{{ row.id }}">{{ texts.get('add') }}</a></td>{% else %}<td><a href="field/del/{{ row.id }}">{{ texts.get('delete') }}</a></td>{% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <nav aria-label="...">
+            <ul class="pager">
+                {{ texts.get('pages') }} {{ p }}/{{ p_all }} <br>
+                <li class="{% if p <= 1 %}disabled{% endif %}">
+                    <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">{{ texts.get('back') }}</a>
+                </li>
+                <li class="{% if p >= p_all %}disabled{% endif %}">
+                    <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">{{ texts.get('next') }}</a>
+                </li>
+            </ul>
+        </nav>
+        </div>
+    </form>
+
+   </div>
+   </div>
+   </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    <script type="field/javascript">
+        function switchCheckbox(node) {
+            status = node.checked;
+            els = document.getElementsByTagName("input");
+            for( i in els ) {
+                if(els[i].name != "del[]") continue;
+                els[i].checked = status ? true : false;
+                console.log(els[i].checked);
+            }
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('new-task')
+        task_button.onclick = function() {
+            window.location.href = "/task";
+            return false;
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('create')
+        task_button.onclick = function() {
+            window.location.href = "/field";
+            return false;
+        }
+    </script>
+
+    {{super()}}
+{% endblock %}

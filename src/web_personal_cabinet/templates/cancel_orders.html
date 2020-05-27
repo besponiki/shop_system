@@ -1,0 +1,92 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}{{ texts.get('categories') }}{% endblock %}
+
+{% block head %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap.min.css') }}">
+    <!-- NProgress -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/nprogress.css') }}">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/animate.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/green.css') }}">
+    <!-- bootstrap-progressbar -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap-progressbar-3.3.4.min.css') }}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/jqvmap.min.css') }}">
+    <!-- bootstrap-daterangepicker -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/daterangepicker.css') }}">
+    <!-- Custom Theme Style -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom.min.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+
+
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <input type="hidden" name="act" value="showSignals">
+        <input type="hidden" name="p" value={{ p }}>
+
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action" align="center">
+                <thead>
+                    <tr>
+                        <th>{{ texts.get('order_good') }}</th>
+                        <th>{{ texts.get('order_price') }}</th>
+                        <th>{{ texts.get('order_user') }}</th>
+                        <th>{{ texts.get('order_id') }}</th>
+                        <th>{{ texts.get('order_status') }}</th>
+                        <th>{{ texts.get('order_adress') }}</th>
+                        <th>{{ texts.get('order_date') }}</th>
+                        <th>{{ texts.get('order_phone') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.good.fields.get('name') }}</td>
+                            <td>{{ row.sum }}</td>
+                            <td>{% for i in tgs.get(row.id) %}<a href="https://{{ i }}">{{ i }}</a><br>{% endfor %}</td>
+                            <td>{{ row.order_id }}</td>
+                            <td>{% if row.status %}{{ row.status.get(user.partner_pannel_lang) }}{% endif %}</td>
+                            <td>{{ row.adres }}</td>
+                            <td>{{ row.date }}</td>
+                            <td>{% if row.phone %}{{ row.phone }}{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <nav aria-label="...">
+        <ul class="pager">
+            {{ texts.get('pages') }} {{ p }}/{{ p_all }} <br>
+            <li class="{% if p <= 1 %}disabled{% endif %}">
+                <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">{{ texts.get('back')  }}</a>
+            </li>
+            <li class="{% if p >= p_all %}disabled{% endif %}">
+                <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">{{ texts.get('next')  }}</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/categories.css') }}">
+{% endblock %}
+
+

@@ -1,0 +1,101 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+{% block head %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap.min.css') }}">
+    <!-- NProgress -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/nprogress.css') }}">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/animate.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/green.css') }}">
+    <!-- bootstrap-progressbar -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap-progressbar-3.3.4.min.css') }}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/jqvmap.min.css') }}">
+    <!-- bootstrap-daterangepicker -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/daterangepicker.css') }}">
+    <!-- Custom Theme Style -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom.min.css') }}">
+{% endblock %}
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+    <div class="col-xs-5">
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+            <h2 style="border-bottom:2px solid #E6E9ED;margin-top: 50px; ">
+                {{ texts.get('answer') }}
+            </h2>
+
+                <label for="message">{{ texts.get('message') }}:</label>
+                <input class="form-control" name="message" id="message" type="text">
+                <label for="image">{{ texts.get('img') }}:</label>
+                <input class="form-control-file" name="image" id="image" type="file"><br>
+
+                <button type="submit" class="btn btn-danger btn-lg pull-left">{{ texts.get('send') }}</button>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">{{ texts.get('dialogue_history_with') }}</div>
+            <div class="panel-body" style="display: inline-block">
+                {% for row in rows %}
+                    <div style="width: 100%; clear: both; color: white">
+                    <br>
+                    <div style="min-width: 40%; background-color: #337ab7; border: 1.5px solid #1d1e1f; border-radius: 10px; padding: 10px 10px 10px 10px; display:table-cell;{% if row['type'] == 'in' %} float:left; {% elif row['type'] == 'out' %} float:right; {%  endif %}" >
+                        {% if row['type'] == 'in' %}
+                            <div align="left" ><b>{% if feedback %}{% if feedback.user.username %}{{ feedback.user.username }}{% else %}{{ feedback.user.user_id }}{% endif %}{% endif %}</b><br></div>
+                            {% if row['class'].text %}
+                                <div align="left" >{{ row['class'].text }}</div>
+                            {% endif %}
+                            {% if row['class'].image_path %}
+                                <img height="100px"  src="{{ url_for('.static', filename=row['class'].image_path) }}">
+                            {% endif %}
+                            <div align="right" >{{ row['class'].formatted_date() }}</div>
+
+                        {% elif row['type'] == 'out' %}
+                            {% if row['class'].text %}
+                                <div align="left" ><b>{{ texts.get('admin_answer') }} </b><br></div>
+                                <div align="left" >{{ row['class'].text }}<br></div>
+                            {% endif %}
+                            {% if row['class'].image_path %}
+                                <img height="100px" align="left" src="{{ url_for('.static', filename=row['class'].image_path) }}" ><br>
+                            {% endif %}
+                            <div style="clear: both;"></div>
+                            <div align="right" >{{ row['class'].formatted_date() }}</div>
+                        {% endif %}
+                    </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+            </form>
+        </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}

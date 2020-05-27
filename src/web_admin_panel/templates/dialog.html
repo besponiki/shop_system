@@ -1,0 +1,82 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Ответить
+            </div>
+
+            <div class="panel-body">
+                <label for="message">Сообщение:</label>
+                <input class="form-control" name="message" id="message" type="text">
+                <label for="image">Картинка:</label>
+                <input class="form-control-file" name="image" id="image" type="file"><br>
+
+                <button type="submit" class="btn btn-danger btn-lg pull-left">Отправить</button>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">История диалога с {% if feedback %}{% if feedback.user.username %}{{ feedback.user.username }}{% else %}{{ feedback.user.user_id }}{% endif %}{% endif %}</div>
+            <div class="panel-body" style="display: inline-block">
+                {% for row in rows %}
+                    <div style="width: 100%; clear: both; color: white">
+                    <br>
+                    <div style="min-width: 40%; background-color: #337ab7; border: 1.5px solid #1d1e1f; border-radius: 10px; padding: 10px 10px 10px 10px; display:table-cell;{% if row['type'] == 'in' %} float:left; {% elif row['type'] == 'out' %} float:right; {%  endif %}" >
+                        {% if row['type'] == 'in' %}
+                            <div align="left" ><b>{% if feedback %}{% if feedback.user.username %}{{ feedback.user.username }}{% else %}{{ feedback.user.user_id }}{% endif %}{% endif %}</b><br></div>
+                            {% if row['class'].text %}
+                                <div align="left" >{{ row['class'].text }}</div>
+                            {% endif %}
+
+                            {% if row['class'].image_path %}
+                                <img height="100px"  src="{{ url_for('.static', filename=row['class'].image_path) }}">
+{#                                <div align="left" >{{ row['class'].text }}</div>#}
+
+                            {% endif %}
+                            <div align="right" >{{ row['class'].formatted_date() }}</div>
+
+                        {% elif row['type'] == 'out' %}
+                            {% if row['class'].text %}
+                                <div align="left" ><b>Ответ администратора</b><br></div>
+                                <div align="left" >{{ row['class'].text }}<br></div>
+                            {% endif %}
+                            {% if row['class'].image_path %}
+                                <img height="100px" align="left" src="{{ url_for('.static', filename=row['class'].image_path) }}" ><br>
+                            {% endif %}
+                            <div style="clear: both;"></div>
+                            <div align="right" >{{ row['class'].formatted_date() }}</div>
+                        {% endif %}
+                    </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+            </form>
+
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+    <style>
+        img:hover{
+            {#transition: all 1s ease-out; transform: scale(10)#}
+            height: 600px;
+        }
+    </style>
+{% endblock %}

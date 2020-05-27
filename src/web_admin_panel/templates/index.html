@@ -1,0 +1,89 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='css/navbar.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='css/font-awesome.css') }}">#}
+    <link href="https://fonts.googleapis.com/css?family=Cuprum" rel="stylesheet">
+
+{% endblock %}
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if apply %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+{#            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Уведомление:</span>
+            {{ apply }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Общие Настройки</div>
+                    <div class="panel-body">
+                        <label for="bot_comission">Комисcия бота</label>
+                        <input class="form-control" name="bot_comission" id="bot_comission" type="text" value=
+                        "{{ core.bot_comission }}">
+
+                        <label for="parent_comission">Процент который идет родителю </label>
+                        <input class="form-control" name="parent_comission" id="parent_comission" type="text" value=
+                        "{{ core.parent_comission }}">
+
+                        <label for="structure_comission">Процент роспределения по сетке</label>
+                        <input class="form-control" name="structure_comission" id="structure_comission" type="text" value=
+                        "{{ core.structure_comission }}">
+
+                        <label for="bot_balance">Баланс бота</label>
+                        <input class="form-control" name="bot_balance" id="bot_balance" type="text" value=
+                        "{{ core.bot_balance }}">
+
+                        <label for="bot_balance">Кол-во строк в категориях</label>
+                        <input class="form-control" name="category_row_num" id="category_row_num" type="text" value=
+                        "{{ core.category_row_num }}">
+
+                        <label for="bot_balance">Кол-во столбцов в категориях</label>
+                        <input class="form-control" name="category_col_num" id="category_col_num" type="text" value=
+                        "{{ core.category_col_num }}">
+
+                        <label for="bot_balance">Цена подписки</label>
+                        <input class="form-control" name="subscribe_price" id="subscribe_price" type="text" value=
+                        "{{ core.subscribe_price }}">
+
+                        <label for="shop_name_text">Название магазина</label>
+                        <input class="form-control" name="shop_name_text" id="shop_name_text" type="text" value=
+                        "{{ core.shop_name_text }}">
+
+                        <p>
+                        <label for="image">Презентация:</label>
+                        <input class="form-control-file" name="presentation" id="image" type="file"><br>
+
+            </p>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger btn-lg pull-right">Сохранить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+

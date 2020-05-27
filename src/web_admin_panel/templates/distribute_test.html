@@ -1,0 +1,66 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+{#            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+    {% if apply %}
+        <div class="alert alert-success alert-dismissible" role="alert">
+{#            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Уведомление:</span>
+            {{ apply }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+        <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="panel panel-primary">
+
+                    <div class="panel-body">
+                        <label for="tag">Номер пользователя в структуре от 1 к {{ reg_user_number }}:</label>
+                        <input class="form-control" name="positional_id" id="positional_id" type="text" >
+                    </div>
+
+                    <div class="panel-body">
+                        <label for="tag">Сумма для распределиения:</label>
+                        <input class="form-control" name="sum" id="sum" type="text" >
+                    </div>
+                        <div class="panel-body">
+                            <label for="tag">Товар:</label>
+                            <select name="good">
+                                <option value="0" selected="selected">Главная сетка</option>
+                                {% for good in goods %}
+                                    <option value="{{ good.id }}">{{ good.fields.get('name') }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                </div>
+
+                <button type="submit" class="btn btn-danger btn-lg pull-right">Исполнить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}

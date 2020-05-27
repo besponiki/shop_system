@@ -1,0 +1,94 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('.static', filename='css/style.css')}}">
+{#{% block styles %}#}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{#{% endblock %}#}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{url_for('.static', filename='js/jquery-latest.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/jquery.tablesorter.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/jquery.tablesorter.pager.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/script.js')}}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <!--<input type="hidden" name="act" value="showSignals">-->
+        <!--<input type="hidden" name="p" value={{ p }}>-->
+
+        <div class="table-responsive">
+            <table class="table table-hover tablesorter" id="users" align="center">
+                <thead>
+                    <tr>
+                        <th>ID Пользователя</th>
+                        <th>Пользователь</th>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Дата</th>
+                        <th>Просмотр/Редактирование</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td {% if row.is_new_question_exist %}style="color: red;"{% endif %}>{{ row.user.user_id }}</td>
+                            <td>{{ row.user.username }}</td>
+                            <td>{{ row.user.first_name }}</td>
+                            <td>{{ row.user.last_name }}</td>
+                            <td>{{ row.formatted_date() }}</td>
+
+                            <td>
+                                <a href="feedback/view/{{ row.id }}">Просмотр/Редактирование</a>
+                                {% if row.is_new_question_exist %}‼️🗣{% endif %}
+                            </td>
+                            <td><a href="/feedback/del/{{ row.id }}">Удалить</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <nav aria-label="...">
+        <ul class="pager">
+            Страница {{ p }}/{{ p_all }} <br>
+            <li class="{% if p <= 1 %}disabled{% endif %}">
+                <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">Назад</a>
+            </li>
+            <li class="{% if p >= p_all %}disabled{% endif %}">
+                <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">Вперед</a>
+            </li>
+        </ul>
+    </nav>
+
+
+{% endblock %}
+
+
+{#{% block scripts %}#}
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<!--<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>-->
+<!--<script>-->
+    <!--$(document).ready( function () {-->
+    <!--$('#users').DataTable();-->
+<!--} );-->
+<!--</script>-->
+<!--<script type="text/javascript" src="{{ url_for('static', filename='jquery-latest.js') }}"></script>-->
+<!--<script type="text/javascript" src="{{ url_for('static', filename='jquery.tablesorter.js') }}"></script>-->
+<!--<script type="text/javascript" src="{{ url_for('static', filename='jquery.tablesorter.pager.js') }}"></script>-->
+<!--<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>-->
+
+{#{{super()}}#}
+{#{% endblock %}#}

@@ -1,0 +1,197 @@
+
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Настройки{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#applying_modal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let deleting_obj_id = button.data('id');
+
+                let modal = $(this);
+
+                modal.find('#apply_button').attr('data-link', 'ajax/text/del/' + deleting_obj_id);
+            });
+
+            let data_table = $('#user_table').DataTable({
+                responsive: {
+                    details: false
+                },
+
+                ajax: {
+                    url: '/ajax/texts',
+                    dataSrc: '',
+                    deferRender: true
+                },
+                columns: [
+                    { data: 'tag' },
+                    { data: 'rus' },
+                    { data: 'applying_way' },
+                    { data: 'edit_button_html' },
+                    { data: 'delete_button_html' },
+                ]
+            });
+
+            $('#apply_button').on('click', function (event) {
+                event.preventDefault();
+                let button = $(this);
+
+                $.ajax({
+                    type: 'POST',
+                    url: button.data('link'),
+                    success: function (result) {
+                        data_table.ajax.reload( null, false );
+
+                        jQuery('#applying_modal').modal('hide');
+                    },
+                    error: function (result) {
+                        alert('error');
+                    }
+                });
+            });
+
+            setInterval( function () {
+                data_table.ajax.reload( null, false );
+            }, 30000 );
+        });
+    </script>
+
+        <script>
+        task_button = document.getElementById('create')
+        task_button.onclick = function() {
+            window.location.href = "/text";
+            return false;
+        }
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <button type="button" id="create" class="btn btn-danger">Добавить текст</button>
+
+    <br>
+    <br>
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <div class="table-responsive">
+            <table class="table table-hover tablesorter" id="user_table" align="center">
+                <thead>
+                    <tr>
+                        <th>Тег</th>
+                        <th>Значение (на деф. языке)</th>
+                        <th>Место</th>
+                        <th>Редактировать</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </form>
+
+    <div class="modal fade" id="applying_modal" tabindex="-1" role="dialog" aria-labelledby="applying_modal_lable" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Подтвердите удаление:</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" data-link="<delete_link>" id="apply_button">Подтвердить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+{#{% block content %}#}
+{##}
+{#    <form method="POST" enctype="multipart/form-data" class="form-horizontal">#}
+{#        <input type="hidden" name="act" value="showSignals">#}
+{#        <input type="hidden" name="p" value={{ p }}>#}
+{##}
+{#        <div class="table-responsive">#}
+{#            <table class="table table-hover" align="center">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th>Тег</th>#}
+{#                        <th>Значение (на деф. языке)</th>#}
+{#                        <th>Место</th>#}
+{#                        <th>Редактировать</th>#}
+{#                        <th>Удалить</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                    {% for row in rows %}#}
+{#                        <tr>#}
+{#                            <td>{{ row.tag }}</td>#}
+{#                            <td>{{ row.values.get('rus') }}</td>#}
+{#                            <td>{{ row.applying_way  }}</td>#}
+{#                            <td><a href="text/edit/{{ row.id }}">Редактировать</a></td>#}
+{#                            <td><a href="text/del/{{ row.id }}">Удалить</a></td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+{#        </div>#}
+{#    </form>#}
+{#    <nav aria-label="...">#}
+{#        <ul class="pager">#}
+{#            Страница {{ p }}/{{ p_all }} <br>#}
+{#            <li class="{% if p <= 1 %}disabled{% endif %}">#}
+{#                <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">Назад</a>#}
+{#            </li>#}
+{#            <li class="{% if p >= p_all %}disabled{% endif %}">#}
+{#                <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">Вперед</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </nav>#}
+{#{% endblock %}#}
+{##}
+{#{% block styles %}#}
+{#    {{super()}}#}
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">#}
+{#{% endblock %}#}
+{##}
+{#{% block scripts %}#}
+{#    <script type="text/javascript">#}
+{#        function switchCheckbox(node) {#}
+{#            status = node.checked;#}
+{#            els = document.getElementsByTagName("input");#}
+{#            for( i in els ) {#}
+{#                if(els[i].name != "del[]") continue;#}
+{#                els[i].checked = status ? true : false;#}
+{#                console.log(els[i].checked);#}
+{#            }#}
+{#        }#}
+{#    </script>#}
+{##}
+{#    <script>#}
+{#        task_button = document.getElementById('new-task')#}
+{#        task_button.onclick = function() {#}
+{#            window.location.href = "/task";#}
+{#            return false;#}
+{#        }#}
+{#    </script>#}
+{##}
+
+{##}
+{#    {{super()}}#}
+{#{% endblock %}#}

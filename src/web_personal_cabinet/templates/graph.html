@@ -1,0 +1,109 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Граф{% endblock %}
+
+{% block head %}
+{#    <style>#}
+{#    .tree > ul > li {#}
+{#    display: inline-block;#}
+{#    float: none;#}
+{#    {% if children_count<4   %}#}
+{#    width: auto;}#}
+{#    .tree{#}
+{#    margin-left: 400px;#}
+{#    }#}
+{#    {% endif %}#}
+{#    {% if 4<=children_count<8   %}#}
+{#    width: auto;}#}
+{#    .tree{#}
+{#    margin-left: 200px;#}
+{#    }#}
+{#    {% endif %}#}
+{#    {% if 8<=children_count<16   %}#}
+{#    width: auto;}#}
+{#    .tree{#}
+{#    margin-left: 200px;#}
+{#    }#}
+{#    {% endif %}#}
+{#    {% if 16<=children_count<32   %}#}
+{#    width:2500px;}#}
+{#        {% else %}#}
+{#    width: 6000px#}
+{#    {% endif %}#}
+{#</style>#}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap.min.css') }}">
+    <!-- NProgress -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/nprogress.css') }}">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/animate.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/green.css') }}">
+    <!-- bootstrap-progressbar -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap-progressbar-3.3.4.min.css') }}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/jqvmap.min.css') }}">
+    <!-- bootstrap-daterangepicker -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/daterangepicker.css') }}">
+    <!-- Custom Theme Style -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('.static', filename='Graph_tree/CSS/jquery-ui.min.css') }}">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+    crossorigin="anonymous">
+    </script>
+    <script src="../static/Graph_tree/js/jquery-ui-1.10.4.custom.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('.static', filename='Graph_tree/CSS/jHTree.css') }}">
+    <script src="../static/Graph_tree/js/jQuery.jHTree.js"></script>
+{#    {{super()}}#}
+{#    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">#}
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+<div id="tree">
+
+</div>
+
+
+
+{% endblock %}
+{% block style %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        var myData = {{ data | tojson }};
+
+        $("#tree").jHTree({
+            callType: 'obj',
+            structureObj: myData
+
+        });
+    </script>
+{% endblock %}
+

@@ -1,0 +1,63 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Опубликованные обьявления{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <input type="hidden" name="act" value="showSignals">
+        <input type="hidden" name="p" value={{ p }}>
+
+        <div class="table-responsive">
+            <table class="table table-hover" align="center">
+                <thead>
+                    <tr>
+                        <th>Название объявления</th>
+                        <th>Цена</th>
+                        <th>Сумма распределения</th>
+                        <th>Категория</th>
+                        <th>Описание</th>
+                        <th>Автор</th>
+                        <th>Фото</th>
+                        <th>Просмотр</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.fields.name }}</td>
+                            <td>{{ row.fields.price }}</td>
+                            <td>{{ row.fields.reward }}</td>
+                            <td>{{ row.category.values.get('rus') }}</td>
+                            <td>{{ row.fields.description }}</td>
+                            <td>{{ row.creator.login }}</td>
+                            <td>{% for img in row.images %} <img height="100px"  src="{{ url_for('.static', filename=img) }}"> {% endfor %}</td>
+                            <td><a href="advert/edit/{{ row.id }}">Просмотр</a></td>
+                            <td><a href="advert/delete/{{ row.id }}">Удалить</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <nav aria-label="...">
+        <ul class="pager">
+            Страница {{ p }}/{{ p_all }} <br>
+            <li class="{% if p <= 1 %}disabled{% endif %}">
+                <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">Назад</a>
+            </li>
+            <li class="{% if p >= p_all %}disabled{% endif %}">
+                <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">Вперед</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}

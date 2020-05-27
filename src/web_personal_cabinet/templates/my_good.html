@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>{% extends "bootstrap/base.html" %}
+
+{% block title %}{{ texts.get('category') }}{% endblock %}
+
+{% block head %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap.min.css') }}">
+    <!-- NProgress -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/nprogress.css') }}">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/animate.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/green.css') }}">
+    <!-- bootstrap-progressbar -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap-progressbar-3.3.4.min.css') }}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/jqvmap.min.css') }}">
+    <!-- bootstrap-daterangepicker -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/daterangepicker.css') }}">
+    <!-- Custom Theme Style -->
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom.min.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="form-group row">
+        <div class="col-xs-1">
+        </div>
+
+    <div class="col-xs-5">
+            <form method="POST" enctype="multipart/form-data" class="form-horizontal form-label-left">
+                <h2 style="border-bottom:2px solid #E6E9ED;margin-top: 50px; ">Новый товар</h2>
+
+            <p>
+                {% for field in fields %}
+                    <p>
+                    <h2 style="border-bottom:2px solid #E6E9ED; " >{{ field.names.get(user.partner_pannel_lang) }}</h2>
+                    {% if target_good %}
+                    <label for="message">{{ target_good.fields.get(field.field_tag) }}</label>
+                    {% else %}
+                    <input class="form-control" name="{{ field.field_tag }}" id="name" type="text" value="">
+                    {% endif %}
+                    </p>
+
+                {% endfor %}
+
+                {% if target_good %}
+                    <label for="message">Категория: {{ target_good.category.values.get(user.partner_pannel_lang) }}</label>
+                    <P>
+                    {% for img in target_good.images %} <img height="100px"  src="{{ url_for('.static', filename=img) }}"> {% endfor %}
+                    </P>
+                {% else %}
+                    <label for="message">Категория:</label>
+                    <select name="category">
+
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" >{{ category.values.get(user.partner_pannel_lang) }}</option>
+                        {% endfor %}
+
+                    </select>
+
+                    <p>
+                    <h2 style="border-bottom:2px solid #E6E9ED; " >Изображения</h2>
+                    <input class="form-control" multiple name="image" id="image" type="file" value="">
+                    </p>
+
+
+                <button type="submit" class="btn btn-round btn-success">Сохранить</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+{% endblock %}

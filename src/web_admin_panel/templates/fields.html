@@ -1,0 +1,100 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Категории{% endblock %}
+
+{% block navbar %}
+    {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="add_btn">
+{#        <button type="button" id="create" class="btn btn-round btn-success" style="margin-top: 30px; margin-bottom: 20px; margin-left: 10px">Добавить новую категорию</button>#}
+
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+        <input type="hidden" name="act" value="showSignals">
+        <input type="hidden" name="p" value={{ p }}>
+
+        <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action" align="center">
+                <thead>
+                    <tr>
+                        <th>Тег</th>
+                        <th>Название</th>
+                        <th>Сообщение в боте</th>
+                        <th>Пользователь</th>
+                        <th>Модерация</th>
+
+{#                        <th>{{ texts.get('edit') }}</th>#}
+{#                        <th>{{ texts.get('delete') }}</th>#}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.field_tag }}</td>
+                            <td>{{ row.names.get('rus') }}</td>
+                            <td>{% if row.message %}{{ row.message.get('rus') }}{% else %}{% endif %}</td>
+                            <td>{{ row.names.get('rus') }}</td>
+                            <td><a href="field/moderate/{{ row.id }}">Модерация</a></td>
+
+{#                            {% if row.is_required %}<td></td>{% else %}<td><a href="field/del/{{ row.id }}">{{ texts.get('delete') }}</a></td>{% endif %}#}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+ </tbody>
+            </table>
+        </div>
+    </form>
+    <nav aria-label="...">
+        <ul class="pager">
+            Страница {{ p }}/{{ p_all }} <br>
+            <li class="{% if p <= 1 %}disabled{% endif %}">
+                <a href="{% if p > 1 %}?p={{ p - 1 }}{% endif %}">Назад</a>
+            </li>
+            <li class="{% if p >= p_all %}disabled{% endif %}">
+                <a href="{% if p < p_all %}?p={{ p + 1 }}{% endif %}">Вперёд</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/style_bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('.static', filename='css/categories.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        function switchCheckbox(node) {
+            status = node.checked;
+            els = document.getElementsByTagName("input");
+            for( i in els ) {
+                if(els[i].name != "del[]") continue;
+                els[i].checked = status ? true : false;
+                console.log(els[i].checked);
+            }
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('new-task')
+        task_button.onclick = function() {
+            window.location.href = "/task";
+            return false;
+        }
+    </script>
+
+    <script>
+        task_button = document.getElementById('create')
+        task_button.onclick = function() {
+            window.location.href = {% if category %}'/sub_category/{{ category.id }}'{% else %}'/category'{% endif %};
+            return false;
+        }
+    </script>
+
+    {{super()}}
+{% endblock %}
